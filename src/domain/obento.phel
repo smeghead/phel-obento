@@ -1,0 +1,8 @@
+(ns domain\obento)
+
+(defstruct product [id stock reserved-stock])
+
+(defstruct order [stock-keeping-units use-voucher])
+  
+(defn begin-order [use-voucher]
+  (order [] use-voucher))

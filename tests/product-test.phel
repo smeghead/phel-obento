@@ -1,0 +1,10 @@
+(ns domain\obento\tests
+  (:require phel\test :refer [deftest is])
+  (:require domain\obento))
+
+(deftest product-test
+  (let [product (obento/product 1 10 5)]
+    (is (= 1 (product :id)))
+    (is (= 10 (product :stock)))
+    (is (= 5 (product :reserved-stock)))))
+

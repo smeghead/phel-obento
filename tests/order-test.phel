@@ -1,0 +1,9 @@
+(ns domain\obento\tests
+  (:require phel\test :refer [deftest is])
+  (:require domain\obento))
+
+(deftest order-test
+  (let [order (obento/begin-order false)]
+    (is (= 0 (count (order :stock-keeping-units))))
+    (is (= false (order :using-voucher)))))
+
