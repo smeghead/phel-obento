@@ -1,4 +1,4 @@
-(ns domain\obento\tests
+(ns domain\obento\product\tests
   (:require phel\test :refer [deftest is])
   (:require domain\obento))
 

@@ -1,20 +1,38 @@
-(ns domain\obento\tests
+(ns domain\obento\order\tests
   (:require phel\test :refer [deftest is])
   (:require domain\obento))
 
-(deftest order-test
+(deftest begin-order-test
   (let [order (obento/begin-order false)]
     (is (= 0 (count (order :stock-keeping-units))))
     (is (= false (order :use-voucher)))))
 
-(deftest simple-order-test
+(deftest simple-is-acceptable-test
   (let [order (obento/begin-order false)
-        product (obento/product 1 800 10 5)
-        order (obento/add-order order (obento/stock-keeping-unit product 2))]
+        order (obento/add-order order (obento/stock-keeping-unit (obento/product 1 800 10 5) 2))]
+    (is (= 1 (count (order :stock-keeping-units))))
+    (is (= true (obento/is-acceptable-order order)))))
+
+(deftest simple-is-acceptable-no-rest-test
+  (let [order (obento/begin-order false)
+        order (obento/add-order order (obento/stock-keeping-unit (obento/product 1 800 10 9) 2))]
+    (is (= 1 (count (order :stock-keeping-units))))
+    (is (= false (obento/is-acceptable-order order)))))
+
+(deftest multiple-is-acceptable-no-rest-test
+  (let [order (obento/begin-order false)
+        order (obento/add-order order (obento/stock-keeping-unit (obento/product 1 800 10 5) 1))
+        order (obento/add-order order (obento/stock-keeping-unit (obento/product 2 800 10 9) 2))]
+    (is (= 2 (count (order :stock-keeping-units))))
+    (is (= false (obento/is-acceptable-order order)))))
+
+(deftest simple-amount-test
+  (let [order (obento/begin-order false)
+        order (obento/add-order order (obento/stock-keeping-unit (obento/product 1 800 10 5) 2))]
     (is (= 1 (count (order :stock-keeping-units))))
     (is (= 1600 (obento/total-amount-order order)))))
 
-(deftest simple2-order-test
+(deftest two-simple-amount-test
   (let [order (obento/begin-order false)
         order (obento/add-order order (obento/stock-keeping-unit (obento/product 1 800 10 5) 2))
         order (obento/add-order order (obento/stock-keeping-unit (obento/product 2 800 10 5) 1))
@@ -22,7 +40,7 @@
     (is (= 2 (count (order :stock-keeping-units))))
     (is (= 2400 (obento/total-amount-order order)))))
 
-(deftest voucher-order-test
+(deftest one-voucher-amount-test
   (let [order (obento/begin-order true)
         order (obento/add-order order (obento/stock-keeping-unit (obento/product 1 800 10 5) 2))
         order (obento/add-order order (obento/stock-keeping-unit (obento/product 2 1800 10 5) 1))
@@ -30,7 +48,7 @@
     (is (= 2 (count (order :stock-keeping-units))))
     (is (= 1600 (obento/total-amount-order order)))))
 
-(deftest voucher2-order-test
+(deftest two-voucher-amount-test
   (let [order (obento/begin-order true)
         order (obento/add-order order (obento/stock-keeping-unit (obento/product 1 1800 10 5) 2))
         order (obento/add-order order (obento/stock-keeping-unit (obento/product 2 800 10 5) 1))

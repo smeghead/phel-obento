@@ -1,10 +1,9 @@
-(ns domain\obento\tests
+(ns domain\obento\sku\tests
   (:require phel\test :refer [deftest is])
   (:require domain\obento))
 
 (deftest stock-keeping-unit-test
-  (let [product (obento/product 1 10 5)
-        sku (obento/stock-keeping-unit product 2)]
+  (let [sku (obento/stock-keeping-unit (obento/product 1 800 10 5) 2)]
     (is (= 1 (get-in sku [:product :id])))
     (is (= 10 (get-in sku [:product :stock])))
     (is (= 5 (get-in sku [:product :reserved-stock])))
