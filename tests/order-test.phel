@@ -5,5 +5,11 @@
 (deftest order-test
   (let [order (obento/begin-order false)]
     (is (= 0 (count (order :stock-keeping-units))))
-    (is (= false (order :using-voucher)))))
+    (is (= false (order :use-voucher)))))
 
+(deftest simple-order-test
+  (let [order (obento/begin-order false)
+        product (obento/product 1 800 10 5)
+        order (obento/add-order order (obento/stock-keeping-unit product 2))]
+    (is (= 1 (count (order :stock-keeping-units))))
+    (is (= 1600 (obento/total-amount-order order)))))

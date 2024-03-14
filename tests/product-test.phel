@@ -3,8 +3,9 @@
   (:require domain\obento))
 
 (deftest product-test
-  (let [product (obento/product 1 10 5)]
+  (let [product (obento/product 1 800 10 5)]
     (is (= 1 (product :id)))
+    (is (= 800 (product :price)))
     (is (= 10 (product :stock)))
     (is (= 5 (product :reserved-stock)))))
 

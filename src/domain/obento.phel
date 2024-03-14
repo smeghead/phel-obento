@@ -1,8 +1,18 @@
 (ns domain\obento)
 
-(defstruct product [id stock reserved-stock])
+(defstruct product [id price stock reserved-stock])
+
+(defstruct stock-keeping-unit [product quantity])
 
 (defstruct order [stock-keeping-units use-voucher])
-  
+
 (defn begin-order [use-voucher]
   (order [] use-voucher))
+
+(defn add-order [order sku]
+  (update order :stock-keeping-units push sku))
+
+(defn total-amount-order [order]
+  (sum (map (fn [sku]
+              (* (get-in sku [:product :price]) (sku :quantity)))
+         (order :stock-keeping-units))))
