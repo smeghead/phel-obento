@@ -15,5 +15,10 @@
             "name": "smeghead",
             "email": "smeghead7@gmail.com"
         }
-    ]
+    ],
+    "scripts": {
+        "test": [
+            "vendor/bin/phel test"
+        ]
+    }
 }
