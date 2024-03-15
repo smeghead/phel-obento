@@ -4,7 +4,7 @@
     "require": {
         "phel-lang/phel-lang": "^0.12.0"
     },
-    "license": "Apache 2.0",
+    "license": "Apache-2.0",
     "autoload": {
         "psr-4": {
             "Smeghead\\PhelObento\\": "src/"
