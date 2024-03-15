@@ -1,5 +1,6 @@
 {
     "name": "smeghead/phel-obento",
+    "description": "obento order.",
     "type": "project",
     "require": {
         "phel-lang/phel-lang": "^0.12.0"
