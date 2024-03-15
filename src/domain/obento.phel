@@ -12,6 +12,14 @@
 (defn add-order [order sku]
   (update order :stock-keeping-units push sku))
 
+(defn is-acceptable-order [order]
+  (all? (fn [sku]
+          (>= (-
+                (get-in sku [:product :stock])
+                (get-in sku [:product :reserved-stock]))
+              (sku :quantity)))
+        (order :stock-keeping-units)))
+
 (defn- most-expensive [order]
   (let [sorted (sort (order :stock-keeping-units) (fn [x y]
                                                      (compare
