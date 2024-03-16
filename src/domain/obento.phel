@@ -6,13 +6,13 @@
 
 (defstruct order [stock-keeping-units use-voucher])
 
-(defn begin-order [use-voucher]
+(defn order-bigin [use-voucher]
   (order [] use-voucher))
 
-(defn add-order [order sku]
+(defn order-add [order sku]
   (update order :stock-keeping-units push sku))
 
-(defn is-acceptable-order [order]
+(defn order-is-acceptable [order]
   (all? (fn [sku]
           (>= (-
                 (get-in sku [:product :stock])
@@ -27,9 +27,11 @@
                                                        (get-in x [:product :price]))))]
     (first sorted)))
 
-(defn total-amount-order [order]
-  (let [most-expensive (most-expensive order)
-        most-expensive-product-id (get-in most-expensive [:product :id])]
+(defn order-voucher-target-product-id [order]
+  (get-in (most-expensive order) [:product :id]))
+
+(defn order-total-amount [order]
+  (let [most-expensive-product-id (order-voucher-target-product-id order)]
     (sum (map (fn [sku]
                 (* (get-in sku [:product :price]) (if (and (order :use-voucher)
                                                            (= (get-in sku [:product :id]) most-expensive-product-id))
