@@ -21,10 +21,11 @@
         (order :stock-keeping-units)))
 
 (defn- most-expensive [order]
-  (let [sorted (sort (order :stock-keeping-units) (fn [x y]
-                                                     (compare
-                                                       (get-in y [:product :price])
-                                                       (get-in x [:product :price]))))]
+  (let [sorted (sort (order :stock-keeping-units)
+                     (fn [x y]
+                       (compare
+                         (get-in y [:product :price])
+                         (get-in x [:product :price]))))]
     (first sorted)))
 
 (defn order-voucher-target-product-id [order]
@@ -32,9 +33,11 @@
 
 (defn order-total-amount [order]
   (let [most-expensive-product-id (order-voucher-target-product-id order)]
-    (sum (map (fn [sku]
-                (* (get-in sku [:product :price]) (if (and (order :use-voucher)
-                                                           (= (get-in sku [:product :id]) most-expensive-product-id))
-                                                    (dec (sku :quantity))
-                                                    (sku :quantity))))
+    (sum
+      (map (fn [sku]
+             (* (get-in sku [:product :price])
+               (if (and (order :use-voucher)
+                         (= (get-in sku [:product :id]) most-expensive-product-id))
+                 (dec (sku :quantity))
+                 (sku :quantity))))
            (order :stock-keeping-units)))))
